@@ -1,0 +1,27 @@
+.about {
+}
+.about-title {
+    font-size: 48px;
+    margin: 40px 0;
+}
+.cards-content {
+    display: flex;
+}
+.about-card {
+}
+.card-title {
+}
+.card-text {
+    
+}
+.about-advantages {
+}
+.advantages-title {
+    font-weight: 400;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+.advantages-text {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
