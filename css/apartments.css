@@ -205,6 +205,21 @@ input::-webkit-inner-spin-button {
     overflow: hidden;
     gap: 15px;
 }
+/* Стили для анимации появления и исчезновения элементов */
+/* Начальный стиль элемента */
+.single-goods {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+/* Стиль элемента при появлении */
+.single-goods.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
 .card__img {
     display: flex;
     justify-content: center;

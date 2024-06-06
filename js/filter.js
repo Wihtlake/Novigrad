@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             container.appendChild(goodDiv);
+            setTimeout(() => {
+                goodDiv.classList.add('visible');
+            }, 0);
         });
 
         container.querySelectorAll('.favorite-button').forEach(button => {
@@ -73,61 +76,70 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function filterGoods(event) {
         if (event) event.preventDefault();
-
+    
         const zone = document.getElementById('zone').value;
         const sizeCheckboxes = document.querySelectorAll('#size .btn:checked');
         const priceMin = document.getElementById('price-min').value;
         const priceMax = document.getElementById('price-max').value;
         const areaMin = document.getElementById('area-min').value;
         const areaMax = document.getElementById('area-max').value;
-
+        const sortOption = document.getElementById('filter-sort').value;
+    
         const sizes = Array.from(sizeCheckboxes).map(cb => cb.value);
         const priceMinNum = priceMin ? parseInt(priceMin, 10) : null;
         const priceMaxNum = priceMax ? parseInt(priceMax, 10) : null;
         const areaMinNum = areaMin ? parseInt(areaMin, 10) : null;
         const areaMaxNum = areaMax ? parseInt(areaMax, 10) : null;
-
-        const filteredData = DATA.filter(item => {
+    
+        let filteredData = DATA.filter(item => {
             let isVisible = true;
-
+    
             if (zone && item.zone !== zone) {
                 isVisible = false;
             }
-
+    
             if (sizes.length > 0 && !sizes.includes(item.size)) {
                 isVisible = false;
             }
-
+    
             if (priceMinNum !== null && item.cost < priceMinNum) {
                 isVisible = false;
             }
-
+    
             if (priceMaxNum !== null && item.cost > priceMaxNum) {
                 isVisible = false;
             }
-
+    
             if (areaMinNum !== null && item.area < areaMinNum) {
                 isVisible = false;
             }
-
+    
             if (areaMaxNum !== null && item.area > areaMaxNum) {
                 isVisible = false;
             }
-
+    
             return isVisible;
         });
-
+    
+        if (sortOption === '1') { // Сначала дешевле
+            filteredData.sort((a, b) => a.cost - b.cost);
+        } else if (sortOption === '2') { // Сначала дороже
+            filteredData.sort((a, b) => b.cost - a.cost);
+        }
+    
         renderGoods(filteredData, goodsContainer);
-
+    
         const isAnyFilterUsed = zone || sizes.length > 0 || priceMin || priceMax || areaMin || areaMax;
         clearButtonContainer.style.display = isAnyFilterUsed ? 'block' : 'none';
-
+    
         if (filteredData.length === 0) {
             goodsContainer.classList.add('hidden');
         } else {
             goodsContainer.classList.remove('hidden');
         }
     }
+
+    
 
     function clearFilters(event) {
         event.preventDefault();
@@ -210,6 +222,10 @@ document.addEventListener('DOMContentLoaded', function() {
         favoriteGoodsContainer.classList.add('hidden');
         updateFavoriteGoods();
     }
+    filters.addEventListener('change', filterGoods); // При изменении фильтров
+    const filterSortSelect = document.getElementById('filter-sort');
+    filterSortSelect.addEventListener('change', filterGoods);
+    filterGoods();
 });
 
 
@@ -285,4 +301,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обновляем счетчик избранных товаров
     updateFavoriteCount();
 });
-
