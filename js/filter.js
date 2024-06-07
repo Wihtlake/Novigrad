@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
             goodDiv.innerHTML = `
                 <div class="card__title">
                     <h3 class="filter__card-title">${item.name}</h3>
-                    <button class="favorite-button" data-id="${item.name}"><img src="./img/heart.svg" alt="Add to favorites"></button>
+                    <button class="favorite-button" data-id="${item.id}"><img src="./img/heart.svg" alt="Add to favorites"></button>
+
                 </div>
                 <div class="card__img">
                     <img class="filter__card-img" src="${item.image}" alt="${item.name}">
@@ -159,10 +160,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Item Name is empty. Aborting...");
         return; // Проверка на наличие данных
     }
-
+    const itemId = parseInt(event.currentTarget.dataset.id, 10);
     let favoriteItems = getFavoriteItems();
     if (!favoriteItems.includes(itemName)) {
-        favoriteItems.push(itemName);
+        favoriteItems.push(itemId);
         setFavoriteItems(favoriteItems);
         updateFavoriteGoods();
         console.log('Favorite Items:', favoriteItems);
@@ -222,9 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
         favoriteGoodsContainer.classList.add('hidden');
         updateFavoriteGoods();
     }
-    filters.addEventListener('change', filterGoods); // При изменении фильтров
-    const filterSortSelect = document.getElementById('filter-sort');
-    filterSortSelect.addEventListener('change', filterGoods);
+    
     filterGoods();
 });
 

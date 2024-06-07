@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderFavoriteGoods() {
         const favoriteItems = getFavoriteItems();
-        const favoriteData = window.DATA.filter(item => favoriteItems.includes(item.name));
+        const favoriteData = window.DATA.filter(item => favoriteItems.includes(item.id));
         favoriteContainer.innerHTML = '';
-        
+
         if (favoriteData.length === 0) {
             favoriteContainer.innerHTML = '<p class="favourite-text">Еще не добавлено ни одной квартиры или машиноместа</p>';
             return;
@@ -20,17 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
             goodDiv.dataset.price = item.cost;
             goodDiv.dataset.area = item.area;
 
-            // <h3>${item.name}</h3>
-            // <img src="${item.image}" alt="${item.name}">
-            // <p>Стоимость: ${item.cost} млн P</p>
-            // <p>Площадь: ${item.area} м2</p>
-            // <button class="remove-favorite-button" data-id="${item.name}">Удалить из избранного</button>
-            // <button class="favorite-button" data-id="${item.name}"></button>
             goodDiv.innerHTML = `
-            <div class="card__title">
+                <div class="card__title">
                     <h3 class="filter__card-title">${item.name}</h3>
-                    <button class="remove-favorite-button" data-id="${item.name}">
-                        <img class="remove-favorite-button" src="./img/Vector-Heart-icon-fill.svg" alt="Remove from favorites"></img>
+                    <button class="remove-favorite-button" data-id="${item.id}">
+                        <img class="remove-favorite-button" src="./img/Vector-Heart-icon-fill.svg" alt="Remove from favorites">
+                        удалить
                     </button>
                 </div>
                 <div class="card__img">
@@ -38,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="card__text">
                     <p class="filter__card-price">${item.cost} P</p>
-                    <p class="filter__card-flat">${item.flat!== undefined? item.flat : ''}</p>
+                    <p class="filter__card-flat">${item.flat !== undefined ? item.flat : ''}</p>
                     <p class="filter__card-area">Площадь: ${item.area} м2</p>
                 </div>
             `;
@@ -47,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         favoriteContainer.querySelectorAll('.remove-favorite-button').forEach(button => {
             button.addEventListener('click', removeFromFavorite);
-            console.log('click');
         });
     }
 
@@ -63,12 +57,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function removeFromFavorite(event) {
-        const itemName = event.target.dataset.id;
+        const itemId = parseInt(event.target.closest('button').dataset.id, 10);
         let favoriteItems = getFavoriteItems();
-        favoriteItems = favoriteItems.filter(item => item !== itemName);
+        favoriteItems = favoriteItems.filter(item => item !== itemId);
         setFavoriteItems(favoriteItems);
         updateFavoriteCount();
         renderFavoriteGoods();
+    }
+
+    function addToFavorite(event) {
+        const itemId = parseInt(event.currentTarget.dataset.id, 10);
+        let favoriteItems = getFavoriteItems();
+        if (!favoriteItems.includes(itemId)) {
+            favoriteItems.push(itemId);
+            setFavoriteItems(favoriteItems);
+            updateFavoriteCount();
+            renderFavoriteGoods();
+        }
     }
 
     function updateFavoriteCount() {
@@ -85,4 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Обновляем счетчик избранных товаров
     updateFavoriteCount();
+
+    // Подключаем событие для кнопок добавления в избранное
+    document.querySelectorAll('.favorite-button').forEach(button => {
+        button.addEventListener('click', addToFavorite);
+    });
 });
