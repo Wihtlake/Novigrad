@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         container.innerHTML = '';
         data.forEach(item => {
             const goodDiv = document.createElement('div');
-            goodDiv.classList.add('single-goods');
+            goodDiv.classList.add('card__content-index');
             goodDiv.dataset.zone = item.zone;
             goodDiv.dataset.size = item.size;
             goodDiv.dataset.price = item.cost;
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card__title">
                     <h3 class="filter__card-title">${item.name}</h3>
                     <button class="favorite-button" data-id="${item.name}"><img src="./img/heart.svg" alt="Add to favorites"></button>
-                    <button class="filter__card-like hidden" data-id="${item.name}"></button>
                 </div>
                 <div class="card__img">
                     <img class="filter__card-img" src="${item.image}" alt="${item.name}">
@@ -46,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="filter__card-flat">${item.flat!== undefined? item.flat : ''}</p>
                     <p class="filter__card-area">Площадь: ${item.area} м2</p>
                 </div>
+                
             `;
             container.appendChild(goodDiv);
             setTimeout(() => {
